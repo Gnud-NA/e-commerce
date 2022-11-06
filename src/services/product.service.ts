@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Category, Product } from 'src/entities';
+import { Category, Product } from '../entities';
 import { BadRequestException } from '@nestjs/common/exceptions';
-import { ResponseHandler } from 'src/common/response';
-import { ErrorException } from 'src/constants/error';
+import { ResponseHandler } from '../common/response';
+import { ErrorException } from '../constants/error';
 
 @Injectable()
 export class ProductService {
@@ -29,7 +29,7 @@ export class ProductService {
         .leftJoinAndSelect('product.discount', 'discount')
         .orderBy('product.discount', 'DESC')
         .limit(10);
-      if (!categoryId && (!startDate || !endDate)) {
+      if (!categoryId) {
         throw new BadRequestException(ErrorException.CATEGORY_NOT_EXIST);
       } else if (startDate && endDate && !category) {
         results = await productQueryBuilder
